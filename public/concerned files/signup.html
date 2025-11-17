@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Dev Community Forum</title>
+    
+    <!-- Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Note the "../" path to go UP to the css folder -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="auth-body">
+
+    <main class="auth-container">
+        
+        <!-- Left Side (Promo) -->
+        <div class="auth-promo">
+            <a href="../index.html" class="back-home-link">&larr; Back to Home</a>
+            <div class="promo-content">
+                <h2>Join the largest community of developers worldwide.</h2>
+            </div>
+        </div>
+
+        <!-- Right Side (Form) -->
+        <div class="auth-form-container">
+            <form class="auth-form">
+                <div class="auth-form-header">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 14L1 17.5V6.5L8.5 10M15.5 14L23 17.5V6.5L15.5 10M14 8L10 16" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <h1>Create Your Account</h1>
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+
+                <button type="submit" class="auth-button">Sign Up</button>
+                
+                <p class="auth-switch-link">
+                    Already have an account? 
+                    <!-- This links to login.html (in the SAME folder) -->
+                    <a href="login.html">Login</a>
+                </p>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Note the "../" path to go UP to the js folder -->
+    <script src="../js/main.js"></script>
+</body>
+</html>
