@@ -3,9 +3,9 @@ Global Styles & Resets
 ================================
 */
 :root {
-    --primary-brand: #4F46E5; /* A nice modern blue/indigo */
+    --primary-brand: #4F46E5; 
     --primary-brand-dark: #4338CA;
-    --dark-blue: #1e1e3f; /* Dark blue from your design */
+    --dark-blue: #1e1e3f; 
     --gradient: linear-gradient(90deg, #4F46E5 0%, #a64aff 100%);
     --light-gray: #f3f4f6;
     --text-dark: #111827;
@@ -17,6 +17,7 @@ Global Styles & Resets
 
 body {
     font-family: 'Inter', sans-serif;
+    /* font-size: 1rem; */
     background-color: #FFFFFF;
     color: var(--text-dark);
 }
