@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Guide to Learning Laravel - Dev Community</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="main-nav">
+            <a href="../index.html" class="nav-logo">
+                <div class="logo-box">Dev</div>
+                <span>Community</span>
+            </a>
+
+            <div class="nav-search">
+                <input type="text" placeholder="Search...">
+            </div>
+
+            <div class="nav-auth">
+                <a href="login.html" class="nav-button-secondary">Log in</a>
+                <a href="signup.html" class="nav-button-primary">Create account</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container layout-grid">
+        
+        <aside class="left-sidebar actions-sidebar">
+            <div class="action-buttons">
+                <button class="action-btn">❤️ <span>45</span></button>
+                <button class="action-btn">💬 <span>12</span></button>
+                <button class="action-btn">🔖 <span>Save</span></button>
+            </div>
+        </aside>
+
+        <main class="main-feed">
+            
+            <article class="article-wrapper">
+                <div class="article-cover">
+                    <img src="https://picsum.photos/800/300" alt="Cover Image">
+                </div>
+
+                <div class="article-content">
+                    <div class="post-meta mb-4">
+                        <img src="https://ui-avatars.com/api/?name=Sarah+Doe&background=random" alt="User" class="user-avatar big-avatar">
+                        <div class="meta-info">
+                            <span class="author-name">Sarah Doe</span>
+                            <span class="post-date">Posted on Oct 24</span>
+                        </div>
+                    </div>
+
+                    <h1 class="article-title">The Ultimate Guide to Learning Laravel in 2025</h1>
+        
+                    <div class="post-tags">
+                        <span class="tag">#laravel</span>
+                        <span class="tag">#php</span>
+                        <span class="tag">#beginners</span>
+                        <span class="tag">#webdev</span>
+                    </div>
+
+                    <div class="article-body">
+                        <p>Laravel is one of the most popular PHP frameworks for a reason. It's elegant, expressive, and robust. In this guide, we will explore how to set up your first project.</p>
+                        
+                        <h3>1. Setting up the Environment</h3>
+                        <p>Before you begin, make sure you have PHP and Composer installed. You can check this by running the following command in your terminal:</p>
+                        
+                        <pre><code>php -v
+composer -v</code></pre>
+
+                        <p>Once verified, you can create a new project using the Laravel installer. It sets up the directory structure automatically.</p>
+
+                        <h3>2. Understanding MVC</h3>
+                        <p>Laravel follows the Model-View-Controller architecture. This separates your data (Model) from what the user sees (View).</p>
+                        
+                        <blockquote>
+                            "The best code is no code at all. Write less, do more."
+                        </blockquote>
+
+                        <p>We will dive deeper into Routing and Middleware in the next section. Stay tuned!</p>
+                    </div>
+                </div>
+            </article>
+
+            <section class="comments-section">
+                <h3>Discussion (12)</h3>
+                
+                <div class="comment-form-box">
+                    <img src="https://ui-avatars.com/api/?name=Me&background=eee" alt="My Avatar" class="user-avatar">
+                    <textarea placeholder="Add to the discussion..."></textarea>
+                    <button class="nav-button-primary">Submit</button>
+                </div>
+
+                <div class="comment-card">
+                    <div class="post-meta">
+                        <img src="https://ui-avatars.com/api/?name=Alex+Dev" alt="User" class="user-avatar">
+                        <div class="meta-info">
+                            <span class="author-name">Alex Dev</span>
+                            <span class="post-date">Oct 25</span>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        <p>This is exactly what I needed! The documentation was a bit confusing for me, but this clears it up.</p>
+                    </div>
+                </div>
+
+                <div class="comment-card">
+                    <div class="post-meta">
+                        <img src="https://ui-avatars.com/api/?name=Jane+Smith" alt="User" class="user-avatar">
+                        <div class="meta-info">
+                            <span class="author-name">Jane Smith</span>
+                            <span class="post-date">Oct 26</span>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        <p>Could you make a follow-up post about Authentication? That's where I always get stuck.</p>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="sidebar-box author-box">
+                <div class="author-header"></div>
+                <div class="author-info">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+Doe&background=random" alt="Sarah" class="author-big-img">
+                    <h3>Sarah Doe</h3>
+                    <p>Full Stack Developer & Technical Writer. I love PHP and Coffee ☕.</p>
+                    <button class="nav-button-primary w-full">Follow</button>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
