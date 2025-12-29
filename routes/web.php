@@ -1,17 +1,24 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
+// Public Home Page (Redirects to Login for now)
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Protected Routes (User must be logged in)
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // Dashboard shows all posts
+    Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+    // Post Management Routes
+    Route::resource('posts', PostController::class);
+    
+    // Profile Management (Default Laravel)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
