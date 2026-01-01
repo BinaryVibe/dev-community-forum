@@ -4,88 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function recent()
-    {
-        $posts = DB::table('posts as p')
-            ->join('users as u', 'p.user_id', '=', 'u.user_id')
-            ->select(
-                'p.post_id',
-                'p.title',
-                'p.body',
-                'p.views',
-                'p.is_published',
-                'p.created_at',
-                'p.updated_at',
-                'p.upvotes',
-                'p.downvotes',
-                'u.username',
-                'u.first_name',
-                'u.last_name'
-            )
-            ->where('p.created_at', '>=', now()->subDays(7))
-            ->orderByDesc('p.created_at')
-            ->get();
-
-        return view('posts.recent', compact('posts'));
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
+    // Show all posts (Dashboard)
     public function index()
     {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
+        $posts = Post::with('user')->latest()->get();
+        return view('dashboard', compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the "Create Post" form
     public function create()
     {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
+        return view('posts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Save the post to Database
     public function store(Request $request)
     {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        // Save post linked to the logged-in user
+        $request->user()->posts()->create($validated);
+
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Show a single post
     public function show(Post $post)
     {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Post $post)
-    {
-        throw new \BadMethodCallException(__METHOD__ . ' is not implemented.');
+        return view('posts.show', compact('post'));
     }
 }
