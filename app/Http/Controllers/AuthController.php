@@ -2,71 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\ModelS\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
 
 class AuthController extends Controller
 {
     /**
-     * Show the form for logging in user.
-     * @return \Illuminate\Contracts\View\View
+     * Show the Login View.
      */
-    public function login()
+    public function showLogin()
     {
+        // We pass 'mode' => 'login' so the Blade file hides the extra fields
         return view('auth.form', ['mode' => 'login']);
     }
 
     /**
-     * Show the form for registering user.
-     * @return \Illuminate\Contracts\View\View
+     * Show the Registration View.
      */
-    public function signup()
+    public function showRegister()
     {
-        return view('auth.form', ['mode' => 'signup']);
+        // We pass 'mode' => 'register' so the Blade file shows all fields
+        return view('auth.form', ['mode' => 'register']);
     }
 
-    public function verify(Request $request)
+    /**
+     * Handle Login Request.
+     */
+    public function login(Request $request)
     {
+        // 1. Validate
         $credentials = $request->validate([
-            'email' => ['required', 'unique:users', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        $validated_data = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required'],
         ]);
 
+        // 2. Attempt Login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            return redirect()->intended('/');
+            return redirect()->intended('/')->with('success', 'Welcome back!');
         }
 
+        // 3. Failed Login
         return back()->withErrors([
-            'email' => 'Invalid email or password.',
+            'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
 
+    /**
+     * Handle Registration Request.
+     */
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:users', 'email'],
+        $attributes = $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users', 'alpha_dash'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
+            'confirm-password' => ['required', 'same:password'] // Checks if it matches the password field
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']), // Always hash passwords!
-        ]);
+        try {
+            $user = User::create($attributes);
 
-        Auth::login($user);
+            // Login and Redirect
+            Auth::login($user);
+            return redirect('/')->with('success', 'Account created!');
 
-        return redirect('/')->with('success', 'Account created successfully!');
+        } catch (QueryException $e) {
+            // Redirect back with a generic error message for the user
+            return back()->withInput()->with('error', 'Database error: Could not save account. Please try again later.');
+        }
+    }
 
+    /**
+     * Handle Logout.
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }

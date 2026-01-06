@@ -2,59 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Show the profile edit page with user data and their posts.
      */
-    public function edit(Request $request): View
+    public function edit()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = auth()->user();
+        
+        // Fetch posts created by this user, newest first
+        $posts = $user->posts()->latest()->get();
+
+        return view('profile.edit', compact('user', 'posts'));
     }
 
     /**
-     * Update the user's profile information.
+     * Update user profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = auth()->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name'  => ['required', 'string', 'max:255'],
+            // Ensure email/username are unique, but ignore the current user's own record
+            'email'      => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'username'   => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('users')->ignore($user->id)],
+        ]);
 
-        $request->user()->save();
+        $user->update($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return back()->with('status', 'Profile updated successfully!');
     }
 
     /**
-     * Delete the user's account.
+     * Update user password.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function updatePassword(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'], // Laravel's built-in check
+            'password'         => ['required', 'confirmed', 'min:8'], // Checks password_confirmation
         ]);
 
-        $user = $request->user();
+        auth()->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return back()->with('status', 'Password changed successfully!');
     }
 }

@@ -1,0 +1,88 @@
+/* css/style.css */
+
+/* 1. General Typography */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+    overflow-x: hidden;
+}
+
+/* 2. Left Side (Promo Section) */
+.auth-promo {
+    /* The requested Blue Background */
+    background-color: #4361ee; 
+    
+    /* Optional: You can use a gradient for a more modern look by uncommenting below: */
+    /* background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); */
+    
+    color: #ffffff;
+    position: relative;
+}
+
+/* The Heading text inside the blue area */
+.auth-promo h2 {
+    font-weight: 700;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+/* 3. Back Link Styling */
+.back-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding-left: 2rem; /* Aligns with the container padding */
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateX(-5px); /* Subtle slide animation */
+}
+
+/* 4. Form Side Styling */
+h1 {
+    font-weight: 700;
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+
+/* Customizing Bootstrap Form Controls to match the blue theme */
+.form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+/* Customizing the Primary Button to match the blue theme */
+.btn-primary {
+    background-color: #4361ee;
+    border-color: #4361ee;
+    padding: 10px 0;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    width: 100%; /* Makes the button full width */
+}
+
+.btn-primary:hover {
+    background-color: #3f37c9;
+    border-color: #3f37c9;
+}
+
+/* 5. Switch Link (Login vs Register text) */
+.auth-switch-link {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.auth-switch-link a {
+    color: #4361ee;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch-link a:hover {
+    text-decoration: underline;
+}

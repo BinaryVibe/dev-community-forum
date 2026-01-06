@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $table = 'posts';
-    protected $primaryKey = 'post_id';
+    protected $primaryKey = 'id';
 
     public $timestamps = true;
 
@@ -16,17 +16,28 @@ class Post extends Model
         'title',
         'body',
         'views',
-        'is_published',
+        // 'is_published' removed
         'upvotes',
         'downvotes',
-    ];  
-
-    protected $casts = [
-        'is_published' => 'boolean',
     ];
+
+    // Casts array is empty now as is_published was the only item
+    protected $casts = [];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'post_id');
+    }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        // Assuming your Users table uses 'id' as primary key
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    // App/Models/Post.php
+    public function votes()
+    {
+        return $this->hasMany(Vote::class, 'post_id', 'post_id');
     }
 }

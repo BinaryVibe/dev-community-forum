@@ -1,6 +1,5 @@
 @php use Illuminate\Support\Str; @endphp
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
@@ -25,32 +24,36 @@
     <h2 class="mb-4">Recent Posts (Last 7 Days)</h2>
 
     @if ($posts->isEmpty())
-        <div class="alert alert-warning">No posts in the last week.</div>
+        <div class="alert alert-warning">No posts found from the last week.</div>
     @else
         @foreach ($posts as $post)
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
 
                     <h4 class="card-title">
-                        <a href="{{ url('posts/' . $post->post_id) }}">
+                        <a href="{{ route('posts.show', $post->id) }}" class="text-decoration-none text-dark">
                             {{ $post->title }}
                         </a>
                     </h4>
 
-                    <div class="text-muted mb-2">
+                    <div class="text-muted mb-2 small">
                         <strong>By:</strong>
-                        {{ $post->first_name }} {{ $post->last_name }}
-                        |
+                        {{ $post->user->first_name ?? 'Unknown' }} {{ $post->user->last_name ?? '' }}
+                        <span class="mx-2">|</span>
+                        
                         <strong>Published:</strong>
-                        {{ $post->created_at }}
-                        |
+                        {{ $post->created_at->diffForHumans() }}
+                        <span class="mx-2">|</span>
+
                         <strong>Views:</strong>
                         {{ $post->views }}
                     </div>
 
-                    <p class="card-text">
+                    <p class="card-text text-secondary">
                         {{ Str::limit($post->body, 200) }}
                     </p>
+                    
+                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-sm btn-outline-primary">Read More</a>
 
                 </div>
             </div>
