@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -31,6 +32,8 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
+Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 
 // Protected Routes (User must be logged in)
 Route::middleware(['auth'])->group(function () {
@@ -49,4 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });

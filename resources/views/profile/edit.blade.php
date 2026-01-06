@@ -107,55 +107,120 @@
 
             <div class="col-lg-7">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
-                        <span>My Posts ({{ $posts->count() }})</span>
-                        <a href="{{ route('posts.create') }}" class="btn btn-sm btn-outline-primary">+ New Post</a>
+                    
+                    <div class="card-header bg-white p-0">
+                        <ul class="nav nav-tabs card-header-tabs m-0" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active fw-bold border-top-0 border-start-0 border-end-0 rounded-0 py-3 px-4" 
+                                        id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-content" 
+                                        type="button" role="tab" aria-selected="true">
+                                    My Posts ({{ $posts->count() }})
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-bold border-top-0 border-start-0 border-end-0 rounded-0 py-3 px-4" 
+                                        id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-content" 
+                                        type="button" role="tab" aria-selected="false">
+                                    My Comments ({{ $comments->count() }})
+                                </button>
+                            </li>
+                        </ul>
                     </div>
+
                     <div class="card-body p-0">
+                        <div class="tab-content" id="profileTabsContent">
+                            
+                            <div class="tab-pane fade show active" id="posts-content" role="tabpanel">
+                                <div class="d-flex justify-content-end p-3 border-bottom">
+                                    <a href="{{ route('posts.create') }}" class="btn btn-sm btn-outline-primary">+ New Post</a>
+                                </div>
 
-                        @if ($posts->isEmpty())
-                            <div class="p-4 text-center text-muted">
-                                You haven't posted anything yet.
-                            </div>
-                        @else
-                            <div class="list-group list-group-flush">
-                                @foreach ($posts as $post)
-                                    <div class="list-group-item p-3">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <h5 class="mb-1">
-                                                    <a href="{{ route('posts.show', $post->id) }}"
-                                                        class="text-decoration-none text-dark">
-                                                        {{ $post->title }}
-                                                    </a>
-                                                </h5>
-                                                <small class="text-muted">
-                                                    Published: {{ $post->created_at->format('M d, Y') }} |
-                                                    Views: {{ $post->views }}
-                                                </small>
-                                            </div>
-
-                                            <div class="d-flex gap-2">
-                                                <a href="{{ route('posts.edit', $post->id) }}"
-                                                    class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-pencil-square"></i> Edit
-                                                </a>
-
-                                                <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
-                                                    onsubmit="return confirm('Are you sure you want to delete this post?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                @if ($posts->isEmpty())
+                                    <div class="p-5 text-center text-muted">
+                                        You haven't posted anything yet.
                                     </div>
-                                @endforeach
+                                @else
+                                    <div class="list-group list-group-flush">
+                                        @foreach ($posts as $post)
+                                            <div class="list-group-item p-3">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <h5 class="mb-1">
+                                                            <a href="{{ route('posts.show', $post->id) }}" class="text-decoration-none text-dark">
+                                                                {{ $post->title }}
+                                                            </a>
+                                                        </h5>
+                                                        <small class="text-muted">
+                                                            {{ $post->created_at->format('M d, Y') }} | 
+                                                            Views: {{ $post->views }}
+                                                        </small>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex gap-2">
+                                                        <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-outline-secondary">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" 
+                                                              onsubmit="return confirm('Delete this post?');">
+                                                            @csrf @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                        @endif
 
+                            <div class="tab-pane fade" id="comments-content" role="tabpanel">
+                                @if ($comments->isEmpty())
+                                    <div class="p-5 text-center text-muted">
+                                        You haven't commented on anything yet.
+                                    </div>
+                                @else
+                                    <div class="list-group list-group-flush">
+                                        @foreach ($comments as $comment)
+                                            <div class="list-group-item p-3">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div class="w-100 pe-3">
+                                                        <p class="mb-1 text-secondary">
+                                                            "{{ Str::limit($comment->body, 80) }}"
+                                                        </p>
+                                                        <small class="text-muted">
+                                                            On: <a href="{{ route('posts.show', $comment->post->id) }}">{{ $comment->post->title }}</a>
+                                                            &bull; {{ $comment->created_at->format('M d, Y') }}
+                                                        </small>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex gap-2">
+                                                        {{-- EDIT BUTTON --}}
+                                                        <a href="{{ route('comments.edit', $comment->id) }}" 
+                                                        class="btn btn-sm btn-outline-secondary" 
+                                                        title="Edit Comment">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+
+                                                        {{-- DELETE FORM --}}
+                                                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
+                                                            onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Comment">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

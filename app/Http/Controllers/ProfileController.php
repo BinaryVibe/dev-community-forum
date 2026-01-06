@@ -14,13 +14,15 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        
-        // Fetch posts created by this user, newest first
+
+        // Fetch posts
         $posts = $user->posts()->latest()->get();
 
-        return view('profile.edit', compact('user', 'posts'));
-    }
+        // NEW: Fetch comments (and the post they belong to)
+        $comments = $user->comments()->with('post')->latest()->get();
 
+        return view('profile.edit', compact('user', 'posts', 'comments'));
+    }
     /**
      * Update user profile information.
      */
@@ -30,10 +32,10 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
-            'last_name'  => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             // Ensure email/username are unique, but ignore the current user's own record
-            'email'      => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'username'   => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'username' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('users')->ignore($user->id)],
         ]);
 
         $user->update($validated);
@@ -48,7 +50,7 @@ class ProfileController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'], // Laravel's built-in check
-            'password'         => ['required', 'confirmed', 'min:8'], // Checks password_confirmation
+            'password' => ['required', 'confirmed', 'min:8'], // Checks password_confirmation
         ]);
 
         auth()->user()->update([
